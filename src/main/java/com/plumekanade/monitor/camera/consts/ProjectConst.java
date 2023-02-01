@@ -12,15 +12,16 @@ public class ProjectConst {
   /**
    * 测试用rtsp视频流地址
    */
-  public static final String RTSP_URL = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4";
+  public static final String RTSP_URL = "rtsp://localhost:554/live";
   /**
    * 单个视频录制时长 秒为单位
    */
-  public static final Long DURATION = 21600L;
+//  public static final Long DURATION = 21600L;
+  public static final Long DURATION = 60L;
   /**
    * 视频保存地址
    */
-  public static final String VIDEO_PATH = "D:\\kanade\\";
+  public static final String VIDEO_PATH = "E:\\code\\";
   /**
    * 视频格式
    */
@@ -33,6 +34,6 @@ public class ProjectConst {
    * 点 .
    */
   public static final String POINT = ".";
-  public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-  public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
+  public static final String VIDEO_NAME_TIME = "yyyy-MM-dd-HH_mm_ss";
+  public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(VIDEO_NAME_TIME);
 }
