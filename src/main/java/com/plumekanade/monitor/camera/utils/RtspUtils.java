@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264;
 
@@ -57,6 +58,7 @@ public class RtspUtils {
       long startTime = SystemClock.now();  // 开始时间 秒
       log.info("【FFmpeg】流 {} 开始保存视频到本地...", streamName);
       while (SystemClock.now() <= (startTime + ProjectConst.DURATION * 1000) && frame != null) {
+        System.out.println(Arrays.toString(frame.image));
         recorder.record(frame);
         frame = grabber.grabFrame();
       }

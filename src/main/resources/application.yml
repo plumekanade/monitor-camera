@@ -1,0 +1,9 @@
+server:
+  port: 8989
+
+# netty\u5C5E\u6027\u914D\u7F6E
+netty:
+  boss: 1
+  worker: 4
+  timeout: 10000
+  port: 9898
