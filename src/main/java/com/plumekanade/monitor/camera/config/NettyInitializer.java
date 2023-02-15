@@ -1,6 +1,7 @@
 package com.plumekanade.monitor.camera.config;
 
 import com.plumekanade.monitor.camera.handler.NettyHandler;
+import com.plumekanade.monitor.camera.mapper.DeviceMapper;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

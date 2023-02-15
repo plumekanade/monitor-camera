@@ -1,9 +1,62 @@
 server:
   port: 8989
 
-# netty\u5C5E\u6027\u914D\u7F6E
+# netty配置
 netty:
   boss: 1
   worker: 4
   timeout: 10000
   port: 9898
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 105MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    deserialization:
+      fail-on-unknown-properties: false
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/camera_monitor?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 10
+      maximumPoolSize: 50
+      # idle-timeout: 60000
+      # max-lifetime: 60000
+      # validation-timeout: 3000
+      # connection-timeout: 10000
+
+mybatis-plus:
+  # mapper.xml文件扫描地址
+  mapper-locations: classpath:/mappers/*.xml
+  global-config:
+    banner: false
+    db-config:
+      # 自增
+      id-type: assign_id
+      # 大写转下划线
+      table-underline: true
+      # 插入以及更新策略
+      insert-strategy: not_null
+      update-strategy: not_null
+      # 未删除值
+      # logic-not-delete-value: 1
+      # 已删除值
+      # logic-delete-value: 0
+      # 逻辑删除字段
+      # logic-delete-field: deleted
+  configuration:
+    # 数据库字段自动转成实体类字段
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  config: classpath:log4j2.xml
+  level:
+    org.springframework: warn
