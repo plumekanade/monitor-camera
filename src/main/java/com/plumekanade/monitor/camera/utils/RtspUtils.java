@@ -58,7 +58,6 @@ public class RtspUtils {
       long startTime = SystemClock.now();  // 开始时间 秒
       log.info("【FFmpeg】流 {} 开始保存视频到本地...", streamName);
       while (SystemClock.now() <= (startTime + ProjectConst.DURATION * 1000) && frame != null) {
-        System.out.println(Arrays.toString(frame.image));
         recorder.record(frame);
         frame = grabber.grabFrame();
       }
@@ -67,8 +66,8 @@ public class RtspUtils {
       }
       // 一个视频录完，重新开启解析
       grabber.stop();
-      grabber.start();
       recorder.stop();
+      grabber.start();
       log.info("【FFmpeg】流 {} 开始下一个视频录制...", streamName);
     }
   }
