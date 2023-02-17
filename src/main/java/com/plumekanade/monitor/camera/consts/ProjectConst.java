@@ -17,15 +17,23 @@ public class ProjectConst {
    * 单个视频录制时长 秒为单位
    */
 //  public static final Long DURATION = 21600L;
-  public static final Long DURATION = 60L;
+  public static Long DURATION;
   /**
    * 视频保存地址
    */
-  public static final String VIDEO_PATH = "E:\\code\\";
+  public static String VIDEO_PATH;
   /**
    * 视频格式
    */
-  public static final String VIDEO_SUFFIX = "mp4";
+  public static String VIDEO_SUFFIX;
+  /**
+   * 流地址前缀
+   */
+  public static String RTSP_PREFIX_URL;
+  /**
+   * 流地址后缀
+   */
+  public static String RTSP_SUFFIX_URL;
   /**
    * 下划线 _
    */

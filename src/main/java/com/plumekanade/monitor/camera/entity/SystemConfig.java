@@ -2,7 +2,9 @@ package com.plumekanade.monitor.camera.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.plumekanade.monitor.camera.enums.SystemCodeEnum;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -24,11 +26,11 @@ public class SystemConfig implements Serializable {
   /**
    * 配置属性的编码
    */
-  private String code;
+  private SystemCodeEnum code;
   /**
    * 名称
    */
-  private String name;
+  private String label;
   /**
    * 配置的值
    */

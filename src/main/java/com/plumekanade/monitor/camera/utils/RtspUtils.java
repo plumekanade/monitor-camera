@@ -1,15 +1,17 @@
 package com.plumekanade.monitor.camera.utils;
 
 import com.plumekanade.monitor.camera.consts.ProjectConst;
+import com.plumekanade.monitor.camera.handler.NettyHandler;
+import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.*;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import static org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264;
 
@@ -30,15 +32,20 @@ public class RtspUtils {
    */
   public void getRecorder(String streamName, String rtspUrl) throws Exception {
     FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(rtspUrl);
+    grabber.setOption("rtsp_transport", "tcp");
     grabber.start();
+//    while (true) {
+    if (grabber.getImageHeight() <= 0 || grabber.getImageWidth() <= 0) {
+//        continue;
+      return;
+    }
+    // 前端的 WebSocket 连接
+    ChannelHandlerContext ctx = NettyHandler.CTX_MAP.get(streamName);
     while (true) {
-      if (grabber.getImageHeight() <= 0 || grabber.getImageWidth() <= 0) {
-        continue;
-      }
       Frame frame = grabber.grabFrame();
       if (frame == null) {
         log.error("【FFmpeg】获取流数据失败, frame为空, 结束 {} 流解析", streamName);
-        break;
+        continue;
       }
       if (frame.imageHeight <= 0 || frame.imageWidth <= 0) {
         continue;
@@ -58,6 +65,14 @@ public class RtspUtils {
       long startTime = SystemClock.now();  // 开始时间 秒
       log.info("【FFmpeg】流 {} 开始保存视频到本地...", streamName);
       while (SystemClock.now() <= (startTime + ProjectConst.DURATION * 1000) && frame != null) {
+        byte[] bytes = imageToBytes(Java2DFrameUtils.toBufferedImage(frame), ProjectConst.VIDEO_SUFFIX);
+        // 为空则是上次还是未连接, 未连接就再查一下
+        if (ctx == null) {
+          ctx = NettyHandler.CTX_MAP.get(streamName);
+        }
+        if (ctx != null) {
+          ctx.channel().writeAndFlush(bytes);
+        }
         recorder.record(frame);
         frame = grabber.grabFrame();
       }
@@ -65,11 +80,26 @@ public class RtspUtils {
         recorder.record(frame);
       }
       // 一个视频录完，重新开启解析
-      grabber.stop();
       recorder.stop();
-      grabber.start();
+      recorder.flush();
+//      grabber.stop();
+//      grabber.start();
       log.info("【FFmpeg】流 {} 开始下一个视频录制...", streamName);
     }
+//    }
+  }
+
+  /**
+   * 图片转字节数组
+   */
+  public byte[] imageToBytes(BufferedImage image, String format) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      ImageIO.write(image, format, baos);
+    } catch (Exception e) {
+      log.error("【FFmpeg】图片转byte数组失败, 异常堆栈: ", e);
+    }
+    return baos.toByteArray();
   }
 
 }
