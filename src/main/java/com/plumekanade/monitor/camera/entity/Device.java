@@ -42,6 +42,10 @@ public class Device implements Serializable {
    */
   private String code;
   /**
+   * 排序号
+   */
+  private Integer sort;
+  /**
    * 创建时间
    */
   private LocalDateTime createTime;
