@@ -2,6 +2,7 @@ package com.plumekanade.monitor.camera.utils;
 
 import com.plumekanade.monitor.camera.consts.ProjectConst;
 import com.plumekanade.monitor.camera.handler.NettyHandler;
+import com.plumekanade.monitor.camera.vo.SocketResult;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.*;
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 import static org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264;
 
@@ -71,7 +73,8 @@ public class RtspUtils {
           ctx = NettyHandler.CTX_MAP.get(streamName);
         }
         if (ctx != null) {
-          ctx.channel().writeAndFlush(bytes);
+          String imageBase64 = ProjectConst.BASE64_PREFIX + Base64.getEncoder().encodeToString(bytes);
+          ctx.channel().writeAndFlush(new SocketResult(imageBase64, ProjectConst.DTF.format(LocalDateTime.now())));
         }
         recorder.record(frame);
         frame = grabber.grabFrame();

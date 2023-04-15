@@ -41,17 +41,18 @@ public class AppInit implements ApplicationRunner {
     ProjectConst.RTSP_PREFIX_URL = map.get(SystemCodeEnum.RTSP_PREFIX_URL).getValue();
     ProjectConst.RTSP_SUFFIX_URL = map.get(SystemCodeEnum.RTSP_SUFFIX_URL).getValue();
 
-//    List<Device> devices = deviceService.list();
-//    if (devices != null && !devices.isEmpty()) {
-//      for (Device device : devices) {
-//        taskExecutor.execute(() -> {
-//          try {
-//            rtspUtils.getRecorder(device.getCode(), ProjectConst.RTSP_URL);
-//          } catch (Exception e) {
-//            log.error("【RTSP】解析设备 {} - {} 的流失败, 异常堆栈: ", device.getName(), device.getCode(), e);
-//          }
-//        });
-//      }
-//    }
+    List<Device> devices = deviceService.list();
+    if (devices != null && !devices.isEmpty()) {
+      for (Device device : devices) {
+        taskExecutor.execute(() -> {
+          try {
+            rtspUtils.getRecorder(device.getCode(), ProjectConst.RTSP_URL);
+          } catch (Exception e) {
+            // TODO 处理连接异常的信息, 添加定时任务检查重新发起连接
+            log.error("【RTSP】解析设备 {} - {} 的流失败, 异常堆栈: ", device.getName(), device.getCode(), e);
+          }
+        });
+      }
+    }
   }
 }

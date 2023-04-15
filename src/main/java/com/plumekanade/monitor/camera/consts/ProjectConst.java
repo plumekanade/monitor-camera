@@ -43,5 +43,6 @@ public class ProjectConst {
    */
   public static final String POINT = ".";
   public static final String VIDEO_NAME_TIME = "yyyy-MM-dd-HH_mm_ss";
+  public static final String BASE64_PREFIX = "data:image/jpg;base64,";
   public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(VIDEO_NAME_TIME);
 }
